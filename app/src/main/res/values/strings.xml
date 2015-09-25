@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Estoque</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="lbl_required">Required!</string>
+    <string name="lbl_saved">Saved!</string>
+</resources>

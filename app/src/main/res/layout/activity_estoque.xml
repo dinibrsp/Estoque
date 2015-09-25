@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="62dp"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/ViewImage"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="3"
+        android:gravity="center"
+        android:src="@mipmap/ic_launcher"
+        />
+
+    <EditText
+        android:id="@+id/editTextName"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="7"
+        android:gravity="left|center"
+        android:hint="Product Name"
+        />
+
+</LinearLayout>
+
+    <EditText
+        android:id="@+id/editTextDescription"
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        android:hint="Product Description"
+        />
+
+    <EditText
+        android:id="@+id/editTextQnt"
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        android:hint="Product Amount"
+        />
+
+    <EditText
+        android:id="@+id/editTextValue"
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        android:hint="Product Value"
+        />
+
+
+</LinearLayout>

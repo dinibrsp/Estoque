@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/app/src/main/java/br/com/cast/turmaformacao/estoque/Util/FormHelper.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/br/com/cast/turmaformacao/estoque/model/persistence/DatabaseHelper.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/br/com/cast/turmaformacao/estoque/model/persistence/EstoqueContract.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/br/com/cast/turmaformacao/estoque/model/persistence/EstoqueReposiroty.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/br/com/cast/turmaformacao/estoque/model/services/EstoqueBusinessService.java" charset="UTF-8" />
+  </component>
+</project>
