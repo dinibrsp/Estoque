@@ -19,11 +19,11 @@ public final class EstoqueReposiroty {
         SQLiteDatabase db = databaseHelper.getWritableDatabase();
 
         ContentValues values = EstoqueContract.getContentValues(estoque);
-        if(estoque.getId() == null) {
+        if(estoque.get_Id() == null) {
             db.insert(EstoqueContract.TABLE, null, values);
         }else{
             String where = EstoqueContract.ID + " = ? ";
-            String[] params = {estoque.getId().toString()};
+            String[] params = {estoque.get_Id().toString()};
             db.update(EstoqueContract.TABLE, values, where, params);
         }
         db.close();
@@ -53,6 +53,23 @@ public final class EstoqueReposiroty {
 
         db.close();
         databaseHelper.close();
+    }
+
+    public static Long getIdByWebId(String webId) {
+
+        DatabaseHelper databaseHelper = DatabaseHelper.getInstance();
+        SQLiteDatabase db = databaseHelper.getReadableDatabase();
+
+        String where = EstoqueContract.WEBID + " = ? ";
+        String params[] = {String.valueOf(webId)};
+
+        Cursor cursor = db.query(EstoqueContract.TABLE,EstoqueContract.COLUNS,where,params,null,null,null);
+
+        Estoque estoque = EstoqueContract.getEstoque(cursor);
+        db.close();
+        databaseHelper.close();
+
+        return estoque == null ? null : estoque.get_Id();
     }
 
 

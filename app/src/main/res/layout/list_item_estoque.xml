@@ -7,44 +7,50 @@
 
     <ImageView
         android:id="@+id/ViewImage"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_weight="2"
-        android:gravity="center"
+        android:gravity="left"
         android:src="@mipmap/ic_launcher"
         />
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_weight="10"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/textViewName"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="4"
-        android:gravity="center"
-        android:text="Implementar adapter"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="2.5"
+        android:text="Implementar adapter"
+        android:gravity="start|center"/>
 
     <TextView
         android:id="@+id/textViewDescription"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="4"
-        android:gravity="center"
-        android:text="Implementar adapter"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="2.5"
+        android:text="Implementar adapter"
+        android:gravity="start|center"/>
 
     <TextView
         android:id="@+id/textViewAmount"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="4"
-        android:gravity="center"
-        android:text="Implementar adapter"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="2.5"
+        android:text="Implementar adapter"
+        android:gravity="start|center"/>
 
     <TextView
         android:id="@+id/textViewValue"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="4"
-        android:gravity="center"
-        android:text="Implementar adapter"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="2.5"
+        android:text="Implementar adapter"
+        android:gravity="start|center"/>
+
+</LinearLayout>
 
 
 

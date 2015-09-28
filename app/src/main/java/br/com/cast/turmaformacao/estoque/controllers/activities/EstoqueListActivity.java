@@ -17,10 +17,12 @@ import android.widget.Toast;
 
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import br.com.cast.turmaformacao.estoque.R;
 import br.com.cast.turmaformacao.estoque.controllers.adapters.EstoqueListAdapter;
 import br.com.cast.turmaformacao.estoque.model.entities.Estoque;
+import br.com.cast.turmaformacao.estoque.model.http.EstoqueService;
 import br.com.cast.turmaformacao.estoque.model.services.EstoqueBusinessService;
 
 public class EstoqueListActivity extends AppCompatActivity {
@@ -33,6 +35,11 @@ public class EstoqueListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_estoque_list);
 
         bindEstoqueList();
+
+    }
+
+    private void onMenuUpdateClick() throws ExecutionException, InterruptedException {
+        new getEstoques().execute();
     }
 
     private void bindEstoqueList(){
@@ -74,6 +81,16 @@ public class EstoqueListActivity extends AppCompatActivity {
             case R.id.menu_add:
                 onMenuAddClick();
                 break;
+
+            case R.id.menu_update:
+                try {
+                    onMenuUpdateClick();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -84,7 +101,7 @@ public class EstoqueListActivity extends AppCompatActivity {
     }
 
 
-    private void updateEstoqueList() {
+    public void updateEstoqueList() {
         List<Estoque> values = EstoqueBusinessService.findAll();
         listViewEstoqueList.setAdapter(new EstoqueListAdapter(this, values));
         EstoqueListAdapter adapter = (EstoqueListAdapter) listViewEstoqueList.getAdapter();
@@ -110,13 +127,46 @@ public class EstoqueListActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 EstoqueBusinessService.delete(selectedEstoque);
                 selectedEstoque = null;
-                //String message = getString("Deletado");
                 updateEstoqueList();
                 Toast.makeText(EstoqueListActivity.this, "Deletado", Toast.LENGTH_SHORT).show();
             }
         })
                 .setNeutralButton("Nao", null).create().show();
 
+    }
+
+
+
+
+    private class getEstoques extends AsyncTask<Void, Void, Void> {
+
+        ProgressDialog progressDialog;
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog = new ProgressDialog(EstoqueListActivity.this);
+            progressDialog.setMessage("Carregando");
+            progressDialog.show();
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            EstoqueBusinessService.synchronize();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void avoid) {
+            super.onPostExecute(avoid);
+            progressDialog.dismiss();
+            updateEstoqueList();
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+            super.onProgressUpdate(values);
+        }
     }
 
     private void onMenuEditClick(){

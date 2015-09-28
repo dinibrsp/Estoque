@@ -1,5 +1,7 @@
 package br.com.cast.turmaformacao.estoque.controllers.activities;
 
+import android.app.ProgressDialog;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -12,6 +14,7 @@ import java.util.List;
 import br.com.cast.turmaformacao.estoque.R;
 import br.com.cast.turmaformacao.estoque.Util.FormHelper;
 import br.com.cast.turmaformacao.estoque.model.entities.Estoque;
+import br.com.cast.turmaformacao.estoque.model.http.EstoqueService;
 import br.com.cast.turmaformacao.estoque.model.services.EstoqueBusinessService;
 
 public class EstoqueFormActivity extends AppCompatActivity {
@@ -36,13 +39,12 @@ public class EstoqueFormActivity extends AppCompatActivity {
 
     private void initEstoque() {
         Bundle extras = getIntent().getExtras();
-        if(extras != null) {
+        if (extras != null) {
             this.estoque = (Estoque) getIntent().getExtras().getParcelable(PARAM_ESTOQUE);
-        }else{
+        } else {
             this.estoque = this.estoque == null ? new Estoque() : estoque;
         }
     }
-
 
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -64,19 +66,50 @@ public class EstoqueFormActivity extends AppCompatActivity {
         String required = EstoqueFormActivity.this.getString(R.string.lbl_required);
         if (!FormHelper.validateRequired(required, editTextName, editTextDescription, editTextQnt, editTextValue)) {
             binEstoque();
-            EstoqueBusinessService.save(estoque);
+            new SalvaEstoque().execute();
             Toast.makeText(EstoqueFormActivity.this, R.string.lbl_saved, Toast.LENGTH_SHORT).show();
             finish();
         }
     }
 
-    private void binEstoque(){
+    private void binEstoque() {
         estoque.setName(editTextName.getText().toString());
         estoque.setDescription(editTextDescription.getText().toString());
-        estoque.setQuant(Integer.parseInt(editTextQnt.getText().toString()));
-        estoque.setMinQuant(0);
+        estoque.setQuant(Long.valueOf(editTextQnt.getText().toString()));
         estoque.setValue(Double.parseDouble(editTextValue.getText().toString()));
     }
+
+    private class SalvaEstoque extends AsyncTask<Void, Void, Void> {
+
+        ProgressDialog progressDialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog = new ProgressDialog(EstoqueFormActivity.this);
+            progressDialog.setMessage("Carregando");
+            progressDialog.show();
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            EstoqueService.saveEstoque(estoque);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void avoid) {
+            super.onPostExecute(avoid);
+            progressDialog.dismiss();
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+            super.onProgressUpdate(values);
+        }
+    }
+
 
     public void bindEditTextName() {
         editTextName = (EditText) findViewById(R.id.editTextName);
