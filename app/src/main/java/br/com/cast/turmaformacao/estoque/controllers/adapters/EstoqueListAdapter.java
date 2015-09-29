@@ -53,14 +53,14 @@ public class EstoqueListAdapter extends BaseAdapter {
 
         int hexColor = android.graphics.Color.parseColor("#673AB7");
 
+
+
         ImageView imageView = (ImageView)estoqueListItemView.findViewById(R.id.ViewImage);
-        imageView.findViewById(R.id.ViewImage).setBackgroundColor(hexColor);
+        //imageView.findViewById(R.id.ViewImage).setBackgroundColor(hexColor);
+
 
         TextView textViewName = (TextView)estoqueListItemView.findViewById(R.id.textViewName);
         textViewName.setText(estoque.getName());
-
-        TextView textViewDescription = (TextView)estoqueListItemView.findViewById(R.id.textViewDescription);
-        textViewDescription.setText(estoque.getDescription());
 
         TextView textViewAmount = (TextView)estoqueListItemView.findViewById(R.id.textViewAmount);
         textViewAmount.setText(estoque.getQuant().toString());

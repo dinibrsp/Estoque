@@ -16,6 +16,7 @@ import br.com.cast.turmaformacao.estoque.Util.FormHelper;
 import br.com.cast.turmaformacao.estoque.model.entities.Estoque;
 import br.com.cast.turmaformacao.estoque.model.http.EstoqueService;
 import br.com.cast.turmaformacao.estoque.model.services.EstoqueBusinessService;
+import br.com.cast.turmaformacao.estoque.sync.SalvaEstoque;
 
 public class EstoqueFormActivity extends AppCompatActivity {
     public static final String PARAM_ESTOQUE = "PARAM_ESTOQUE";
@@ -66,8 +67,9 @@ public class EstoqueFormActivity extends AppCompatActivity {
         String required = EstoqueFormActivity.this.getString(R.string.lbl_required);
         if (!FormHelper.validateRequired(required, editTextName, editTextDescription, editTextQnt, editTextValue)) {
             binEstoque();
-            new SalvaEstoque().execute();
-            Toast.makeText(EstoqueFormActivity.this, R.string.lbl_saved, Toast.LENGTH_SHORT).show();
+            EstoqueBusinessService.save(estoque);
+            new SalvaEstoque().execute(estoque);
+            //Toast.makeText(EstoqueFormActivity.this, R.string.lbl_saved, Toast.LENGTH_SHORT).show();
             finish();
         }
     }
@@ -77,37 +79,6 @@ public class EstoqueFormActivity extends AppCompatActivity {
         estoque.setDescription(editTextDescription.getText().toString());
         estoque.setQuant(Long.valueOf(editTextQnt.getText().toString()));
         estoque.setValue(Double.parseDouble(editTextValue.getText().toString()));
-    }
-
-    private class SalvaEstoque extends AsyncTask<Void, Void, Void> {
-
-        ProgressDialog progressDialog;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            progressDialog = new ProgressDialog(EstoqueFormActivity.this);
-            progressDialog.setMessage("Carregando");
-            progressDialog.show();
-
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            EstoqueService.saveEstoque(estoque);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void avoid) {
-            super.onPostExecute(avoid);
-            progressDialog.dismiss();
-        }
-
-        @Override
-        protected void onProgressUpdate(Void... values) {
-            super.onProgressUpdate(values);
-        }
     }
 
 

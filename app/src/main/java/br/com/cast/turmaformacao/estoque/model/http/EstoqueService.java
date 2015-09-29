@@ -73,7 +73,7 @@ public class EstoqueService {
             conn.disconnect();
 
             }
-        catch (IOException e) {
+        catch (Exception e) {
             Log.e(EstoqueService.class.getName(), "" + e.getMessage());
         }
     }

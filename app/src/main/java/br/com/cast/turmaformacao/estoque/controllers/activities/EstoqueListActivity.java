@@ -16,12 +16,15 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 
+import com.melnykov.fab.FloatingActionButton;
+
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import br.com.cast.turmaformacao.estoque.R;
 import br.com.cast.turmaformacao.estoque.controllers.adapters.EstoqueListAdapter;
 import br.com.cast.turmaformacao.estoque.model.entities.Estoque;
+import br.com.cast.turmaformacao.estoque.sync.GetEstoques;
 import br.com.cast.turmaformacao.estoque.model.http.EstoqueService;
 import br.com.cast.turmaformacao.estoque.model.services.EstoqueBusinessService;
 
@@ -29,17 +32,18 @@ public class EstoqueListActivity extends AppCompatActivity {
 
     private ListView listViewEstoqueList;
     private Estoque selectedEstoque;
+    private FloatingActionButton fab;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_estoque_list);
-
         bindEstoqueList();
-
+        bindFloatingActionButton();
     }
 
     private void onMenuUpdateClick() throws ExecutionException, InterruptedException {
-        new getEstoques().execute();
+        new GetEstoques().execute();
+        updateEstoqueList();
     }
 
     private void bindEstoqueList(){
@@ -60,7 +64,6 @@ public class EstoqueListActivity extends AppCompatActivity {
         super.onResume();
     }
 
-
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.menu_estoque_list, menu);
         return super.onCreateOptionsMenu(menu);
@@ -72,32 +75,19 @@ public class EstoqueListActivity extends AppCompatActivity {
         super.onCreateContextMenu(menu, v, menuInfo);
     }
 
-
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch(item.getItemId()){
-            case R.id.menu_add:
-                onMenuAddClick();
-                break;
-
             case R.id.menu_update:
                 try {
                     onMenuUpdateClick();
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                } catch (Exception e) {
+                    Toast.makeText(EstoqueListActivity.this, "Server Offline", Toast.LENGTH_SHORT).show();;
                 }
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void onMenuAddClick() {
-        Intent goToEstoqueFormActivity = new Intent(EstoqueListActivity.this, EstoqueFormActivity.class);
-        startActivity(goToEstoqueFormActivity);
     }
 
 
@@ -132,41 +122,6 @@ public class EstoqueListActivity extends AppCompatActivity {
             }
         })
                 .setNeutralButton("Nao", null).create().show();
-
-    }
-
-
-
-
-    private class getEstoques extends AsyncTask<Void, Void, Void> {
-
-        ProgressDialog progressDialog;
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            progressDialog = new ProgressDialog(EstoqueListActivity.this);
-            progressDialog.setMessage("Carregando");
-            progressDialog.show();
-
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            EstoqueBusinessService.synchronize();
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void avoid) {
-            super.onPostExecute(avoid);
-            progressDialog.dismiss();
-            updateEstoqueList();
-        }
-
-        @Override
-        protected void onProgressUpdate(Void... values) {
-            super.onProgressUpdate(values);
-        }
     }
 
     private void onMenuEditClick(){
@@ -175,6 +130,15 @@ public class EstoqueListActivity extends AppCompatActivity {
         startActivity(goToEstoqueForm);
     }
 
-
-
+    private void bindFloatingActionButton() {
+        fab = (FloatingActionButton) findViewById(R.id.button_add);
+        fab.attachToListView(listViewEstoqueList);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent goToEstoqueFormActivity = new Intent(EstoqueListActivity.this, EstoqueFormActivity.class);
+                startActivity(goToEstoqueFormActivity);
+            }
+        });
+    }
 }
