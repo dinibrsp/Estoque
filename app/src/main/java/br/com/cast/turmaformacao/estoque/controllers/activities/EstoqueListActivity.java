@@ -1,5 +1,6 @@
 package br.com.cast.turmaformacao.estoque.controllers.activities;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -12,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -33,6 +35,7 @@ public class EstoqueListActivity extends AppCompatActivity {
     private ListView listViewEstoqueList;
     private Estoque selectedEstoque;
     private FloatingActionButton fab;
+    private Activity context = EstoqueListActivity.this;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +72,7 @@ public class EstoqueListActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         getMenuInflater().inflate(R.menu.menu_context_estoque_list, menu);
@@ -93,7 +97,28 @@ public class EstoqueListActivity extends AppCompatActivity {
 
     public void updateEstoqueList() {
         List<Estoque> values = EstoqueBusinessService.findAll();
-        listViewEstoqueList.setAdapter(new EstoqueListAdapter(this, values));
+        listViewEstoqueList.setAdapter(new EstoqueListAdapter(context, values) {
+            @Override
+            public void onMenuEditClick(Estoque estoque) {
+                Intent goToEstoqueForm = new Intent(EstoqueListActivity.this, EstoqueFormActivity.class);
+                goToEstoqueForm.putExtra(EstoqueFormActivity.PARAM_ESTOQUE, selectedEstoque);
+                startActivity(goToEstoqueForm);
+            }
+
+            @Override
+            public void onMenuDeleteClick(Estoque estoque) {
+                new AlertDialog.Builder(EstoqueListActivity.this).setTitle("Certeza?").setMessage("Deletar").setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        EstoqueBusinessService.delete(selectedEstoque);
+                        selectedEstoque = null;
+                        updateEstoqueList();
+                        Toast.makeText(EstoqueListActivity.this, "Deletado", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                        .setNeutralButton("Nao", null).create().show();
+            }
+        });
         EstoqueListAdapter adapter = (EstoqueListAdapter) listViewEstoqueList.getAdapter();
         adapter.notifyDataSetChanged();
     }
@@ -141,4 +166,8 @@ public class EstoqueListActivity extends AppCompatActivity {
             }
         });
     }
+
+
+
+
 }

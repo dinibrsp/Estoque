@@ -41,6 +41,7 @@
         android:layout_width="match_parent"
         android:layout_height="62dp"
         android:hint="Product Amount"
+        android:inputType="number"
         />
 
     <EditText
@@ -48,6 +49,7 @@
         android:layout_width="match_parent"
         android:layout_height="62dp"
         android:hint="Product Value"
+        android:inputType="number"
         />
 
 

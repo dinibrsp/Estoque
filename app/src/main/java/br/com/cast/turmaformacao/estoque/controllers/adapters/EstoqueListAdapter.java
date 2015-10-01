@@ -3,22 +3,28 @@ package br.com.cast.turmaformacao.estoque.controllers.adapters;
 
 import android.app.Activity;
 import android.graphics.PorterDuff;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.os.Bundle;
 
 import java.util.List;
+import java.util.ResourceBundle;
 
 import br.com.cast.turmaformacao.estoque.model.entities.Estoque;
 import br.com.cast.turmaformacao.estoque.R;
 import br.com.cast.turmaformacao.estoque.model.entities.Estoque;
 
-public class EstoqueListAdapter extends BaseAdapter {
+public abstract class EstoqueListAdapter extends BaseAdapter {
 
     private List<Estoque> estoqueList;
     private Activity context;
+    private ResourceBundle resources;
+    private Estoque estoque;
 
     public EstoqueListAdapter(Activity context, List<Estoque> estoqueList){
         this.context = context;
@@ -48,7 +54,7 @@ public class EstoqueListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Estoque estoque = getItem(position);
+        estoque = getItem(position);
         View estoqueListItemView = context.getLayoutInflater().inflate(R.layout.list_item_estoque, parent, false);
 
         int hexColor = android.graphics.Color.parseColor("#673AB7");
@@ -68,7 +74,29 @@ public class EstoqueListAdapter extends BaseAdapter {
         TextView textViewValue = (TextView)estoqueListItemView.findViewById(R.id.textViewValue);
         textViewValue.setText(estoque.getValue().toString());
 
+        /*Toolbar toolbar = (Toolbar) estoqueListItemView.findViewById(R.id.toolbar);
+        toolbar.inflateMenu(R.menu.menu_context_estoque_list);
+
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.menu_delete:
+                        onMenuDeleteClick(estoque);
+                        break;
+                    case R.id.menu_edit:
+                        onMenuEditClick(estoque);
+                        break;
+                }
+                return true;
+            }
+        });*/
+
 
         return estoqueListItemView;
     }
+    public abstract void onMenuEditClick(Estoque estoque);
+
+    public abstract void onMenuDeleteClick(Estoque estoque);
+
 }
